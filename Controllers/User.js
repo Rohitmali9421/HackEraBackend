@@ -5,15 +5,7 @@ const bcrypt = require("bcrypt");
 const { uploadOnCloudinary } = require("../Services/Cloudnary");
 
 
-async function checkEmail(email) {
-  try {
-    const result = await verifyEmail(email);
-    return result.isValid; // Returns true if email exists
-  } catch (error) {
-    console.error('Error verifying email:', error);
-    return false;
-  }
-}
+
 
 async function handleLogin(req, res) {
   try {
@@ -101,6 +93,7 @@ const handleUpdateUser = async (req, res) => {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
 };
+
 async function handleGetUser(req, res) {
   try {
     const userID = req.user.id;
@@ -120,4 +113,5 @@ module.exports = {
   handleSignUp,
   handleUpdateUser,
   handlecheck,
+  handleGetUser
 };
