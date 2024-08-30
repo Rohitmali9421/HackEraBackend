@@ -74,6 +74,10 @@ async function handleSignUp(req, res) {
   }
 }
 
+async function handlecheck(req, res) {
+  res.end("Hello");
+}
+
 const handleUpdateUser = async (req, res) => {
   const email = req.user.id;
   const updates = req.body;
@@ -103,4 +107,5 @@ module.exports = {
   handleLogin,
   handleSignUp,
   handleUpdateUser,
+  handlecheck
 };
