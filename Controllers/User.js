@@ -101,11 +101,24 @@ const handleUpdateUser = async (req, res) => {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
 };
+async function handleGetUser(req, res) {
+  try {
+    const userID = req.user.id;
+
+    const user = await User.findById(userID).select("-password");
+    if (!user) return res.status(400).json({ msg: "User Not Found" });
+
+    return res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+}
 
 
 module.exports = {
   handleLogin,
   handleSignUp,
   handleUpdateUser,
-  handlecheck
+  handlecheck,
+  handleGetUser
 };
