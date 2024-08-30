@@ -26,4 +26,5 @@ const authAdmin = async (req, res, next) => {
 };
 module.exports = {
   authenticateToken,
+  authAdmin
 };

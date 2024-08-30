@@ -120,5 +120,4 @@ module.exports = {
   handleSignUp,
   handleUpdateUser,
   handlecheck,
-  handleGetUser
 };

@@ -71,6 +71,12 @@ const UserSchema = mongoose.Schema({
       }
     },
   ],
+  products: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 //   login_attempts: {
 //     type: Number,
 //     default: 0,
