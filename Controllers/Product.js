@@ -1,6 +1,5 @@
 const Product = require("../Models/Product");
-const {handleRecommendation}=require("../Services/Recommendation")
-// import { handleRecommendation } from "../Services/Recommendation";
+
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
@@ -79,47 +78,10 @@ async function handleCreateProduct(req, res) {
     return res.status(500).json({ msg: error.message });
   }
 }
-async function handleRecomendedProduct(req, res) {
-  // const userId = req.user.id
-  const userId = 1
-  const productData = [
-    {
-      "user_id": 1,
-      "product_id": 123,
-      "product_name": "Santoor",
-      "view_time": 2,
-      "visit_count": 3,
-      "liked": 1
-    }, {
-      "user_id": 1,
-      "product_id": 124,
-      "product_name": "iphone 11",
-      "view_time": 90,
-      "visit_count": 11,
-      "liked": 1
-    }, {
-      "user_id": 1,
-      "product_id": 125,
-      "product_name": "blue shirt",
-      "view_time": 5,
-      "visit_count": 1,
-      "liked": 0
-    }, {
-      "user_id": 1,
-      "product_id": 126,
-      "product_name": "laptop",
-      "view_time": 30,
-      "visit_count": 20,
-      "liked": 0
-    }
-  ]
-  console.log(handleRecommendation(userId, productData));
-  
-  return res.status(200).json({msg:"Recommendation generated"})
-  // const productData=req.
-}
+
+
 module.exports = {
   handleGetProducts,
   handleCreateProduct,
-  handleRecomendedProduct
+
 }

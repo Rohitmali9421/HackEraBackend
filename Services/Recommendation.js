@@ -1,19 +1,14 @@
 const { exec } = require('child_process');
-const fs = require('fs');
 
-function handleRecommendation(req, res){
+function handleRecommendation(req, res) {
     const userId = req.body.user_id;
     const productData = req.body.product_data;
 
-    const csvData = productData.map(row => 
-        `${row.user_id},${row.product_id},${row.product_name},${row.view_time},${row.visit_count},${row.liked}`
-    ).join('\n');
-    const tempFilePath = `Services/input_data_${userId}.csv`;
-    fs.writeFileSync(tempFilePath, `user_id,product_id,product_name,view_time,visit_count,liked\n${csvData}`);
-    // console.log(tempFilePath)
-    exec(`python3 Services/recommendation.py ${tempFilePath}`, (error, stdout, stderr) => {
-        fs.unlinkSync(tempFilePath);
+    // Convert productData to JSON string
+    const jsonData = JSON.stringify(productData);
 
+    // Execute the Python script and pass the JSON data through stdin
+    const pythonProcess = exec(`python3 Services/recommendation.py`, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error}`);
             return res.status(500).send('Internal Server Error');
@@ -25,8 +20,12 @@ function handleRecommendation(req, res){
         const output = stdout.trim();
         res.send(output);
     });
+
+    // Write the JSON data to the Python script's stdin
+    pythonProcess.stdin.write(jsonData);
+    pythonProcess.stdin.end();
 }
 
-module.exports ={
+module.exports = {
     handleRecommendation
-}
+};

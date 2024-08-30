@@ -1,5 +1,5 @@
 const express = require("express");
-const { handleGetProducts, handleCreateProduct, handleRecomendedProduct } = require("../Controllers/Product");
+const { handleGetProducts, handleCreateProduct } = require("../Controllers/Product");
 const { authenticateToken } = require("../Middlewares/Auth");
 const { handleRecommendation } = require("../Services/Recommendation");
 
