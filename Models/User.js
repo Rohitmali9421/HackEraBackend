@@ -51,7 +51,26 @@ const UserSchema = mongoose.Schema({
     type: String,
     default: "other",
   },
-
+  cart: [
+    {
+      productID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      quantity: {
+        type: Number,
+        min: 1,
+      },
+    },
+  ],
+  intrest: [
+    {
+      productID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      }
+    },
+  ],
 //   login_attempts: {
 //     type: Number,
 //     default: 0,
