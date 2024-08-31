@@ -87,6 +87,13 @@ const UserSchema = mongoose.Schema({
     averageDailysales: { type: Number ,default:0},
     pendingOrder: { type: Number ,default:0},
     newCustomerThis: { type: Number ,default:0},
+  },
+  product_data:{
+    prouduct_id: { type: Number },
+    product_name: { type: Number },
+    view_time: { type: Number },
+    visit_count: { type: Number },
+    liked: { type: Number },
   }
 //   login_attempts: {
 //     type: Number,

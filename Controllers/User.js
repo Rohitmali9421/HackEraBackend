@@ -3,6 +3,7 @@ const User = require("../Models/User");
 const { setUser } = require("../Services/Auth");
 const bcrypt = require("bcrypt");
 const { uploadOnCloudinary } = require("../Services/Cloudnary");
+const mongoose = require("mongoose");
 
 async function handleLogin(req, res) {
   try {
@@ -145,6 +146,26 @@ async function handleAddToCart(req, res) {
     return res.status(500).json({ msg: error.message });
   }
 }
+ async function handleRecomandation(req, res) {
+  try {
+    const userId = req.body;
+    const { product_data } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { product_data },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user.product_data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
 module.exports = {
@@ -154,5 +175,6 @@ module.exports = {
   handlecheck,
   handleGetUser,
   handleGetAnalytics,
-  handleAddToCart
+  handleAddToCart,
+  handleRecomandation
 };
