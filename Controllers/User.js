@@ -106,6 +106,18 @@ async function handleGetUser(req, res) {
     res.status(500).json({ error: "Server error. Please try again later." });
   }
 }
+async function handleGetAnalytics(req, res) {
+  try {
+    const userID = req.user.id;
+
+    const user = await User.findById(userID, 'Analytics');
+    if (!user) return res.status(400).json({ msg: "User Not Found" });
+    
+    return res.status(200).json({ Analytics: user.Analytics });
+  } catch (error) {
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+}
 
 
 module.exports = {
@@ -113,5 +125,6 @@ module.exports = {
   handleSignUp,
   handleUpdateUser,
   handlecheck,
-  handleGetUser
+  handleGetUser,
+  handleGetAnalytics
 };
