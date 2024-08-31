@@ -47,8 +47,8 @@ async function handleGetProduct(req, res) {
   try {
     const features = new APIFeatures(Product.find(), req.query)
       .filtering()
-      .sorting()
-      .pagination();
+      // .sorting()
+      // .pagination();
     const products = await features.query;
     return res.status(200).json(products);
   } catch (error) {
