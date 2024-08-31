@@ -63,7 +63,7 @@ async function handleCreateProduct(req, res) {
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    const { title, price, description, content, imagePath, category } =
+    const { title, price, description, imagePath, category } =
       req.body;
       
     let cat = await Category.findOne({ name: category });
@@ -76,7 +76,6 @@ async function handleCreateProduct(req, res) {
       title: title,
       price,
       description,
-      content,
       image,
       category: cat.id,
     });
@@ -104,10 +103,29 @@ async function handleUpdateProduct(req, res) {
     return res.status(500).json({ msg: error.message });
   }
 }
+async function handleSearch (req, res) {
+  try {
+    const { query } = req.query;
+
+    if (!query) {
+      return res.status(400).json({ message: 'Query parameter is required' });
+    }
+
+    // Search products by title (you can expand this to search by other fields)
+    const products = await Product.find({
+      title: { $regex: query, $options: 'i' },
+    }).limit(10); // Limit the number of suggestions
+
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 module.exports = {
   handleGetProduct,
   handleCreateProduct,
   handleDeleteProduct,
   handleUpdateProduct,
+  handleSearch
 };

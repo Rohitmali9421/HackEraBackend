@@ -63,14 +63,19 @@ const UserSchema = mongoose.Schema({
       },
     },
   ],
-  intrest: [
+  fav: [
     {
       productID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-      }
+      },
+      quantity: {
+        type: Number,
+        min: 1,
+      },
     },
   ],
+
   products: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -16,10 +16,6 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    content: {
-      type: String,
-      required: true,
-    },
     image: {
       type: Object,
       required: true,
@@ -29,6 +25,14 @@ const productSchema = mongoose.Schema(
       ref:"Category",
       trim:true,
       required: true,
+    },
+    brand: {
+      type: String,
+      trim: true,
+    },
+    ratings: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

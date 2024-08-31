@@ -45,14 +45,6 @@ const validateCreateProduct = [
     .withMessage("description must be a string")
     .isLength({ min: 20 })
     .withMessage("description must be at least 20 characters long"),
-  check("content")
-    .not()
-    .isEmpty()
-    .withMessage("content is required")
-    .isString()
-    .withMessage("content must be a string")
-    .isLength({ min: 20 })
-    .withMessage("content must be at least 20 characters long"),
   check("category")
     .not()
     .isEmpty()
