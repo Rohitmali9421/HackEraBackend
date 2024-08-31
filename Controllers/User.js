@@ -149,12 +149,11 @@ async function handleAddToCart(req, res) {
  async function handleRecomandation(req, res) {
   try {
     const userId = req.body;
-    const { product_data } = req.body;
+    
 
-    const user = await User.findByIdAndUpdate(
+    const user = await User.findOne(
       userId,
-      { product_data },
-      { new: true }
+      "product_data"
     );
 
     if (!user) {
@@ -166,6 +165,49 @@ async function handleAddToCart(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
+async function handleUpdateReconmand(req, res) {
+  try {
+    const userId = req.user.id;
+    const { product_id, product_name, view_time, liked } = req.body;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find the index of the product in the product_data array
+    const productIndex = user.product_data.findIndex(
+      (item) => item.product_id === product_id
+    );
+
+    if (productIndex !== -1) {
+      // Product exists, update its visit_count, view_time, and liked status
+      user.product_data[productIndex].visit_count += 1;
+      user.product_data[productIndex].view_time += view_time; // Accumulate view time
+      user.product_data[productIndex].liked = liked; // Update liked status
+    } else {
+      // Product does not exist, add new product data
+      user.product_data.push({
+        product_id,
+        product_name,
+        view_time,
+        visit_count: 1,
+        liked,
+      });
+    }
+
+    // Save the updated user document
+    await user.save();
+
+    res.status(200).json({ message: "Product data updated successfully", product_data: user.product_data });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}
+
+
 
 
 module.exports = {
@@ -176,5 +218,6 @@ module.exports = {
   handleGetUser,
   handleGetAnalytics,
   handleAddToCart,
-  handleRecomandation
+  handleRecomandation,
+  handleUpdateReconmand
 };

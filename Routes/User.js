@@ -1,5 +1,5 @@
 const express = require("express");
-const { handleLogin, handleSignUp, handleUpdateUser, handlecheck, handleGetUser, handleGetAnalytics, handleAddToCart, handleRecomandation } = require("../Controllers/User");
+const { handleLogin, handleSignUp, handleUpdateUser, handlecheck, handleGetUser, handleGetAnalytics, handleAddToCart, handleRecomandation, handleUpdateReconmand } = require("../Controllers/User");
 const { validateLogin, validateSignUp } = require("../Middlewares/Validation");
 const FileUpload = require("../Middlewares/FileUpload");
 const { authenticateToken } = require("../Middlewares/Auth");
@@ -12,6 +12,7 @@ router.post("/update",authenticateToken,FileUpload,handleUpdateUser );
 router.get("/getuser",authenticateToken,handleGetUser );
 router.get("/getAnalytics",authenticateToken,handleGetAnalytics );
 router.patch("/cart", authenticateToken, handleAddToCart);
-router.patch("/getRecomandationdata", handleRecomandation);
+router.get("/getRecomandationdata", handleRecomandation);
+router.patch("/updateRecomandationdata",authenticateToken, handleUpdateReconmand);
 
 module.exports = router;
