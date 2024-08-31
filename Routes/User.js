@@ -1,5 +1,5 @@
 const express = require("express");
-const { handleLogin, handleSignUp, handleUpdateUser, handlecheck, handleGetUser, handleGetAnalytics } = require("../Controllers/User");
+const { handleLogin, handleSignUp, handleUpdateUser, handlecheck, handleGetUser, handleGetAnalytics, handleAddToCart } = require("../Controllers/User");
 const { validateLogin, validateSignUp } = require("../Middlewares/Validation");
 const FileUpload = require("../Middlewares/FileUpload");
 const { authenticateToken } = require("../Middlewares/Auth");
@@ -11,5 +11,6 @@ router.post("/signup", validateSignUp, handleSignUp);
 router.post("/update",authenticateToken,FileUpload,handleUpdateUser );
 router.get("/getuser",authenticateToken,handleGetUser );
 router.get("/getAnalytics",authenticateToken,handleGetAnalytics );
+router.patch("/cart", authenticateToken, handleAddToCart);
 
 module.exports = router;

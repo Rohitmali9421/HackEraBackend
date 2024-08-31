@@ -1,5 +1,7 @@
 const Product = require("../Models/Product");
-
+const User = require("../Models/User");
+const { validationResult } = require("express-validator");
+const { uploadOnCloudinary } = require("../Services/Cloudnary");
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
@@ -61,23 +63,29 @@ async function handleCreateProduct(req, res) {
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    //   const { title, price, description, content, imagePath, category } =
-    //     req.body;
-
-    //   const image = await uploadOnCloudinary(req.file.path);
-    //   const newproduct = await Product.create({
-    //     title: title,
-    //     price,
-    //     description,
-    //     content,
-    //     image,
-    //     category: cat.id,
-    //   });
+      const { title, price, description, content, imagePath, category } =
+        req.body;
+        console.log(req.body);
+        
+        const userID = req.user.id;
+        const image = await uploadOnCloudinary(imagePath);
+       console.log(image)
+      const newproduct = await Product.create({
+        userID,
+        name: title,
+        price,
+        description,
+        image,
+        category,
+        content,
+        category
+      });
     return res.status(200).json({ msg: "Product Added" });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
 }
+
 
 
 module.exports = {

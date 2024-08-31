@@ -28,8 +28,49 @@ const validateSignUp = [
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long"),
 ];
+const validateCreateProduct = [
+  check("name")
+    .not()
+    .isEmpty()
+    .withMessage("Title is required")
+    .isString()
+    .withMessage("Name must be a string")
+    .isLength({ min: 3 })
+    .withMessage("Title must be at least 3 characters long"),
+  check("description")
+    .not()
+    .isEmpty()
+    .withMessage("description is required")
+    .isString()
+    .withMessage("description must be a string")
+    .isLength({ min: 20 })
+    .withMessage("description must be at least 20 characters long"),
+  check("content")
+    .not()
+    .isEmpty()
+    .withMessage("content is required")
+    .isString()
+    .withMessage("content must be a string")
+    .isLength({ min: 20 })
+    .withMessage("content must be at least 20 characters long"),
+  check("category")
+    .not()
+    .isEmpty()
+    .withMessage("category is required")
+    .isString()
+    .withMessage("category must be a string")
+    .isLength({ min: 3 })
+    .withMessage("content must be at least 3 characters long"),
+  check("price")
+    .not()
+    .isEmpty()
+    .withMessage("Price is required")
+    .isNumeric()
+    .withMessage("Price must be a Number"),
+];
 
 module.exports = {
   validateLogin,
   validateSignUp,
+  validateCreateProduct
 };

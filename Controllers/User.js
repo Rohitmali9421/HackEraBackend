@@ -4,9 +4,6 @@ const { setUser } = require("../Services/Auth");
 const bcrypt = require("bcrypt");
 const { uploadOnCloudinary } = require("../Services/Cloudnary");
 
-
-
-
 async function handleLogin(req, res) {
   try {
     const errors = validationResult(req);
@@ -110,12 +107,42 @@ async function handleGetAnalytics(req, res) {
   try {
     const userID = req.user.id;
 
-    const user = await User.findById(userID, 'Analytics');
+    const user = await User.findById(userID,'Analytics');
     if (!user) return res.status(400).json({ msg: "User Not Found" });
-    
-    return res.status(200).json({ Analytics: user.Analytics });
+
+    return res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: "Server error. Please try again later." });
+  }
+}
+async function handleAddToCart(req, res) {
+  try {
+    const { productId } = req.body;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({ msg: "User Not Found" });
+    }
+
+    const productIndex = user.cart.findIndex(
+      (item) => item.productID?.toString() === productId
+    );
+
+    if (productIndex > -1) {
+      user.cart[productIndex].quantity += 1;
+    } else {
+      user.cart.push({
+        productID: new mongoose.Types.ObjectId(productId),
+        quantity: 1,
+      });
+    }
+
+    await user.save();
+    const updatedUser = await User.findById(userId).select("-password");
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
   }
 }
 
@@ -126,5 +153,6 @@ module.exports = {
   handleUpdateUser,
   handlecheck,
   handleGetUser,
-  handleGetAnalytics
+  handleGetAnalytics,
+  handleAddToCart
 };
