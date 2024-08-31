@@ -171,30 +171,28 @@ async function handleUpdateReconmand(req, res) {
     const { product_id, product_name, view_time, liked } = req.body;
 
     // Find the user by ID
-    
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Find the index of the product in the product_data array
-    const productIndex = user.product_data.findIndex(
-      (item) => item.product_id === product_id
-    );
-    // console.log(req.body.product_id+"--------------");
+    // Flag to track if the product exists
+    let productExists = false;
 
-    if (productIndex !== -1) {
-      // Product exists, update its visit_count, view_time, and liked status
-      user.product_data[productIndex].visit_count += 1;
-      user.product_data[productIndex].view_time += view_time; // Accumulate view time
-      user.product_data[productIndex].liked = liked; // Update liked status
-      user.product_data[productIndex].product_name = product_name;
-      user.product_data[productIndex].product_id = product_id;
-    // console.log(user.product_data[productIndex].product_id);
+    // Update existing product data if it exists
+    user.product_data.forEach((item) => {
+      if (item.product_id === product_id) {
+        item.visit_count += 1;
+        item.view_time += view_time; // Add the new view time to the existing one
+        item.liked = liked; // Update liked status
+        item.product_name = product_name;
+        productExists = true;
+      }
+    });
 
-    } else {
-      // Product does not exist, add new product data
+    // If the product doesn't exist, add new product data
+    if (!productExists) {
       user.product_data.push({
         product_id,
         product_name,
@@ -202,9 +200,8 @@ async function handleUpdateReconmand(req, res) {
         visit_count: 1,
         liked,
       });
-
     }
-    
+
     // Save the updated user document
     await user.save();
 
@@ -213,6 +210,8 @@ async function handleUpdateReconmand(req, res) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+
+
 
 
 

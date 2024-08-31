@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
-
   email: {
     type: String,
     required: true,
@@ -16,13 +15,13 @@ const UserSchema = mongoose.Schema({
     type: String,
     trim: true,
   },
-  
+
   profile_picture: {
     type: Object,
-    default:{
+    default: {
       public_id: null,
       url: "https://static.vecteezy.com/system/resources/previews/007/469/004/non_2x/graduated-student-in-simple-flat-personal-profile-icon-or-symbol-people-concept-illustration-vector.jpg",
-    } 
+    },
   },
 
   role: {
@@ -40,7 +39,7 @@ const UserSchema = mongoose.Schema({
     state: { type: String },
     zip_code: { type: String },
     country: { type: String },
-    default: {}
+    default: {},
   },
 
   date_of_birth: {
@@ -82,21 +81,21 @@ const UserSchema = mongoose.Schema({
       ref: "Product",
     },
   ],
-  Analytics:{
-    totalOrder: { type: Number ,default:0},
-    averageDailysales: { type: Number ,default:0},
-    pendingOrder: { type: Number ,default:0},
-    newCustomerThis: { type: Number ,default:0},
+  Analytics: {
+    totalOrder: { type: Number, default: 0 },
+    averageDailysales: { type: Number, default: 0 },
+    pendingOrder: { type: Number, default: 0 },
+    newCustomerThis: { type: Number, default: 0 },
   },
-  product_data:[{
-    prouduct_id: { type: Number},
-    product_name: { type: String},
-    view_time: { type: Number },
-    visit_count: { type: Number },
-    liked: { type: Number },
-  
-  },]
-
+  product_data: [
+    {
+      product_id: { type: String, required: true },
+      product_name: String,
+      view_time: Number,
+      visit_count: Number,
+      liked: Number,
+    },
+  ],
 });
 const User = mongoose.model("User", UserSchema);
 module.exports = User;
