@@ -1,5 +1,6 @@
 const Category = require("../Models/Category");
 const Product = require("../Models/Product");
+const { uploadOnCloudinary } = require("../Services/Cloudnary");
 
 async function handleGetCategory(req, res) {
   try {
