@@ -26,6 +26,7 @@ async function uploadOnCloudinary(localFilePath) {
     return null;
   }
 }
+
 async function deleteOnCloudinary(public_id) {
   try {
     const response = await cloudinary.api.delete_resources([public_id]);

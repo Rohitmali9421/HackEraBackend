@@ -29,7 +29,7 @@ const validateSignUp = [
     .withMessage("Password must be at least 8 characters long"),
 ];
 const validateCreateProduct = [
-  check("name")
+  check("title")
     .not()
     .isEmpty()
     .withMessage("Title is required")

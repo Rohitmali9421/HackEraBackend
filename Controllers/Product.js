@@ -1,5 +1,6 @@
+const Category = require("../Models/Category");
 const Product = require("../Models/Product");
-const User = require("../Models/User");
+
 const { validationResult } = require("express-validator");
 const { uploadOnCloudinary } = require("../Services/Cloudnary");
 class APIFeatures {
@@ -42,13 +43,12 @@ class APIFeatures {
   }
 }
 
-async function handleGetProducts(req, res) {
-
+async function handleGetProduct(req, res) {
   try {
     const features = new APIFeatures(Product.find(), req.query)
       .filtering()
-    // .sorting()
-    // .pagination();
+      .sorting()
+      .pagination();
     const products = await features.query;
     return res.status(200).json(products);
   } catch (error) {
@@ -63,33 +63,51 @@ async function handleCreateProduct(req, res) {
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-      const { title, price, description, content, imagePath, category } =
-        req.body;
-        console.log(req.body);
-        
-        const userID = req.user.id;
-        const image = await uploadOnCloudinary(imagePath);
-       console.log(image)
-      const newproduct = await Product.create({
-        userID,
-        name: title,
-        price,
-        description,
-        image,
-        category,
-        content,
-        category
-      });
-    return res.status(200).json({ msg: "Product Added" });
+    const { title, price, description, content, imagePath, category } =
+      req.body;
+      
+    let cat = await Category.findOne({ name: category });
+
+    if (!cat) {
+      return res.status(400).json({ msg: "Category does not exists" });
+    }
+    const image = await uploadOnCloudinary(req.file.path);
+    const newproduct = await Product.create({
+      title: title,
+      price,
+      description,
+      content,
+      image,
+      category: cat.id,
+    });
+    return res.status(200).json({ msg: "Product Added", newproduct });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
 }
 
-
+async function handleDeleteProduct(req, res) {
+  try {
+    const productID = req.params.id;
+    const product = await Product.findById(productID);
+    deleteOnCloudinary(product.image.public_id);
+    await Product.findByIdAndDelete(productID);
+    return res.json({ msg: "deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
+  }
+}
+async function handleUpdateProduct(req, res) {
+  try {
+    return res.json({ msg: "put" });
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
+  }
+}
 
 module.exports = {
-  handleGetProducts,
+  handleGetProduct,
   handleCreateProduct,
-
-}
+  handleDeleteProduct,
+  handleUpdateProduct,
+};
